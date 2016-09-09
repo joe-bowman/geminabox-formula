@@ -1,0 +1,9 @@
+description "Geminabox Ruby Gem Mirror"
+author "Joe Bowman <joe.bowman@genomicsengland.co.uk>"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+respawn
+respawn limit 3 10
+
+exec /usr/local/bin/rackup -p {{ geminabox.bind_port }} -o {{ geminabox.bind_address }} -O Verbose={{ geminabox.verbose_logging }} -E production -P {{ geminabox.file_root }}/geminabox.pid {{ geminabox.file_root }}/config.ru >> {{ geminabox.log_path }}/geminabox.log

@@ -1,0 +1,49 @@
+## system defaults
+{% set geminabox = salt['grains.filter_by']({
+  'default': {
+    'pkgs': salt['grains.filter_by']({
+      'Debian': [
+        'ruby',
+        'ruby-dev',
+      ],
+      'Redhat': [
+        'ruby',
+        'ruby-devel',
+      ]
+    }),
+    'bind_address': salt['grains.get']('ipv4')[1],
+    'bind_port': 9292,
+    'geminabox_gem': 'geminabox',
+    'file_root': '/srv/geminabox',
+    'log_path': '/var/log/geminabox',
+    'verbose_logging': False,
+  }
+}, merge=salt['pillar.get']('geminabox:lookup')) %}
+
+
+## application config defaults
+{% set geminabox_cfg = salt['grains.filter_by']({
+  'default': {
+    'data' : geminabox.file_root + '/data',
+  }
+}, merge=salt['pillar.get']('geminabox:config')) %}
+
+
+## init system defaults
+{% set geminabox_init = salt['grains.filter_by']({
+  'upstart': {
+    'source': 'salt://geminabox/files/upstart.jinja',
+    'file_path' : '/etc/init/geminabox.conf',
+    'permissions' : '664',
+  },
+  'sysvinit': {
+    'source': 'salt://geminabox/files/sysvinit.jinja',
+    'file_path' : '/etc/init.d/geminabox',
+    'permissions' : '775',
+  },
+  'systemd': {
+    'source': 'salt://geminabox/files/systemd.jinja',
+    'file_path' : '/etc/systemd/system/geminabox.service',
+    'permissions' : '664',
+  }
+}, grain='init', default='sysvinit') %}

@@ -1,0 +1,11 @@
+[Unit]
+Description=Geminabox Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/rackup -p {{ geminabox.bind_port }} -o {{ geminabox.bind_address }} -O Verbose={{ geminabox.verbose_logging }} -E production -P {{ file_root }}/geminabox.pid {{ file_root }}/config.ru >> {{ log_path }}/geminabox.log
+Type=forking
+PIDFile={{ file_root }}/geminabox.pid
+
+[Install]
+WantedBy=default.target

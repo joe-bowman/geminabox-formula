@@ -1,0 +1,15 @@
+geminabox:
+  lookup:
+    pkgs:
+      - ruby
+      - ruby-dev
+    geminabox_gem: geminabox
+    geminabox_version: ~1.0
+    file_root: /srv/geminabox
+    log_path: /srv/geminabox/logs
+    bind_address: 192.168.0.1
+    bind_port: 9292
+  config:
+    data: /srv/geminabox/data
+    rubygems_proxy: True
+    allow_remote_failure: True
