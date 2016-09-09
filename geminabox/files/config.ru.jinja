@@ -1,0 +1,19 @@
+require "rubygems"
+require "geminabox"
+
+{%- for k, v in config.items() %}
+  {%- if v is sameas True %}
+Geminabox.{{ k }} = {{ v|lower }}
+  {%- elif v is sameas False %}
+Geminabox.{{ k }} = {{ v|lower }}
+  {%- elif v is string %}
+Geminabox.{{ k }} = "{{ v }}"
+  {%- elif v is number %}
+Geminabox.{{ k }} = {{ v }}
+  {%- else %}
+# unable to render config value '{{ k }}'
+  {%- endif %}
+{%- endfor %}
+
+
+run Geminabox::Server
